@@ -1,3 +1,7 @@
+# (Only) Added Air Purifier 3 support with Miot API
+
+Tested on Air Purifier 3 (`zhimi.airpurifier.mb3`)
+
 # miIO Device Library
 
 [![npm version](https://badge.fury.io/js/miio.svg)](https://badge.fury.io/js/miio)
@@ -25,13 +29,13 @@ them.
 
 Currently supported devices are:
 
-* Air Purifiers (1, 2 and Pro)
-* Mi Humidifier
-* Mi Smart Socket Plug and Power Strips
-* Mi Robot Vacuum (V1 and V2)
-* Mi Smart Home Gateway (Aqara) and accessories - switches, sensors, etc
-* Philips Light Bulb and Eyecare Lamp
-* Yeelights (White Bulb, Color Bulb, Desk Lamp and Strip)
+- Air Purifiers (1, 2 and Pro)
+- Mi Humidifier
+- Mi Smart Socket Plug and Power Strips
+- Mi Robot Vacuum (V1 and V2)
+- Mi Smart Home Gateway (Aqara) and accessories - switches, sensors, etc
+- Philips Light Bulb and Eyecare Lamp
+- Yeelights (White Bulb, Color Bulb, Desk Lamp and Strip)
 
 See [documentation for devices](docs/devices/README.md) for information about
 the types, their API and supported device models. You can also check
@@ -62,12 +66,14 @@ Resolve a handle to the device:
 
 ```javascript
 // Resolve a device, resolving the token automatically or from storage
-miio.device({ address: '192.168.100.8' })
+miio
+  .device({ address: '192.168.100.8' })
   .then(device => console.log('Connected to', device))
   .catch(err => handleErrorHere);
 
 // Resolve a device, specifying the token (see below for how to get the token)
-miio.device({ address: '192.168.100.8', token: 'token-as-hex' })
+miio
+  .device({ address: '192.168.100.8', token: 'token-as-hex' })
   .then(device => console.log('Connected to', device))
   .catch(err => handleErrorHere);
 ```
@@ -76,7 +82,8 @@ Call methods to interact with the device:
 
 ```javascript
 // Switch the power of the device
-device.togglePower()
+device
+  .togglePower()
   .then(on => console.log('Power is now', on))
   .catch(err => handleErrorHere);
 
@@ -91,7 +98,8 @@ Listen to events such as property changes and actions:
 device.on('power', power => console.log('Power changed to', power));
 
 // The device is available for event handlers
-const handler = ({ action }, device) => console.log('Action', action, 'performed on', device);
+const handler = ({ action }, device) =>
+  console.log('Action', action, 'performed on', device);
 device1.on('action', handler);
 device2.on('action', handler);
 ```
@@ -99,12 +107,13 @@ device2.on('action', handler);
 Capabilities and types are used to hint about what a device can do:
 
 ```javascript
-if(device.matches('cap:temperature')) {
+if (device.matches('cap:temperature')) {
   console.log(await device.temperature());
 }
 
-if(device.matches('cap:switchable-power')) {
-  device.setPower(false)
+if (device.matches('cap:switchable-power')) {
+  device
+    .setPower(false)
     .then(console.log)
     .catch(console.error);
 }
@@ -141,7 +150,7 @@ const devices = miio.devices({
 });
 
 devices.on('available', device => {
-  if(device.matches('placeholder')) {
+  if (device.matches('placeholder')) {
     // This device is either missing a token or could not be connected to
   } else {
     // Do something useful with device
@@ -155,11 +164,11 @@ devices.on('unavailable', device => {
 
 `miio.devices()` supports these options:
 
-* `cacheTime`, the maximum amount of seconds a device can be unreachable before it becomes unavailable. Default: `1800`
-* `filter`, function used to filter what devices are connected to. Default: `reg => true`
-* `skipSubDevices`, if sub devices on Aqara gateways should be skipped. Default: `false`
-* `useTokenStorage`, if tokens should be fetched from storage (see device management). Default: `true`
-* `tokens`, object with manual mapping between ids and tokens (advanced, use [Device management](docs/management.md) if possible)
+- `cacheTime`, the maximum amount of seconds a device can be unreachable before it becomes unavailable. Default: `1800`
+- `filter`, function used to filter what devices are connected to. Default: `reg => true`
+- `skipSubDevices`, if sub devices on Aqara gateways should be skipped. Default: `false`
+- `useTokenStorage`, if tokens should be fetched from storage (see device management). Default: `true`
+- `tokens`, object with manual mapping between ids and tokens (advanced, use [Device management](docs/management.md) if possible)
 
 See [Advanced API](docs/advanced-api.md) for details about `miio.browse()`.
 
